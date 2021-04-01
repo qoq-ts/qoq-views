@@ -1,15 +1,10 @@
 import { Slot } from 'qoq';
+import { Context } from 'koa';
 import views, { viewsOptions } from 'koa-views';
 
-export interface ViewsContextProps {
-  render(viewPath: string, locals?: any): Promise<void>;
-}
-
-export class Views extends Slot<Slot.Web, ViewsContextProps> {
+export class Views extends Slot<Slot.Web, Pick<Context, 'render'>> {
   constructor(root: string, options?: typeof viewsOptions) {
     super();
-    const renderer = views(root, options);
-    // @ts-ignore
-    this.use(renderer);
+    this.use(views(root, options));
   }
 }
